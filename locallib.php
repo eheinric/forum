@@ -411,7 +411,6 @@ class assign_submission_forum extends assign_submission_plugin {
             }
         }
         $contribution .= assign_submission_forum::closing_tag("forum");
-        mtrace($contribution);
         // convert xml into html
         $xml = new DOMDocument;
         $xml->loadxml($contribution);
