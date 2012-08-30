@@ -40,7 +40,9 @@ $string['forum'] = 'Submissions from forum(s)';
 $string['forumidselected'] = 'Forum to extract from';
 $string['forumidselected_help'] = 'Discussion contributions to the selected forum will be extracted and submitted on behalf of students as assignment work';
 
-$string['seepostincontext'] = "See post in context";
+$string['posthasattachment'] = 'Post has attachment';
+
+$string['seepostincontext'] = 'See post in context';
 
 $string['whentoextractonsave'] = "Extract forum contributions on save";
 $string['whentoextractondate'] = "Extract forum contributions on specific date and time";

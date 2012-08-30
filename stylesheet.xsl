@@ -34,6 +34,8 @@
 		    </xsl:attribute>
 		    <xsl:value-of select="@desc"/>
 		  </xsl:element>
+          <xsl:if test="@add != ''">, <xsl:value-of select="@add"/>
+          </xsl:if>
 	    </td>
 	  </tr>
 	  <tr>

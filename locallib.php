@@ -113,6 +113,25 @@ class assign_submission_forum extends assign_submission_plugin {
     }
 
     /**
+     * Produce a list of files suitable for export that represent this feedback or submission
+     *
+     * @param stdClass $submission The submission
+     * @return array - return an array of files indexed by filename
+     */
+    public function get_files(stdClass $submission) {
+        $result = array();
+        $fs = get_file_storage();
+
+        $files = $fs->get_area_files($this->assignment->get_context()->id, 'assignsubmission_forum', ASSIGNSUBMISSION_FORUM_FILEAREA, $submission->id, "timemodified", false);
+
+        foreach ($files as $file) {
+            $result[$file->get_filename()] = $file;
+        }
+        return $result;
+    }
+
+
+    /**
      * Count the number of files
      *
      * @param int $submissionid
@@ -376,7 +395,12 @@ class assign_submission_forum extends assign_submission_plugin {
                         $path_post = $path . '#p' . $post->parent;
                     }
                     $text = get_string('seepostincontext', 'assignsubmission_forum');
-                    $contribution .= assign_submission_forum::post_start($date, $text, $path_post);
+                    // check if there has been an attachment to the post and prepare additional text accordingly
+                    $add_text = '';
+                    if ($post->attachment > 0) {
+                        $add_text = get_string('posthasattachment', 'assignsubmission_forum');
+                    }
+                    $contribution .= assign_submission_forum::post_start($date, $text, $path_post, $add_text);
                     // format_text_email takes out the html tags (which is what we need, as otherwise the xml format is upset
                     $contribution .= assign_submission_forum::post_content(format_text_email($post->message, FORMAT_HTML));
                     //$contribution .= assign_submission_forum::post_content($post->message);
@@ -387,6 +411,7 @@ class assign_submission_forum extends assign_submission_plugin {
             }
         }
         $contribution .= assign_submission_forum::closing_tag("forum");
+        mtrace($contribution);
         // convert xml into html
         $xml = new DOMDocument;
         $xml->loadxml($contribution);
@@ -442,10 +467,10 @@ EOD;
      * @param string $address The path to the posting in context
      * @return string The opening tag for the post
      */
-    static private function post_start($date, $text, $address) {
+    static private function post_start($date, $text, $address, $additionaltext) {
 
         $xml = <<< EOD
-        <post date="$date" desc="$text" address="$address">
+        <post date="$date" desc="$text" address="$address" add="$additionaltext">
 
 EOD;
         return $xml;

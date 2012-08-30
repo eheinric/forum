@@ -51,8 +51,54 @@
  Code review and testing is strongly recommended.
  
  
-Extension Ideas
-_______________
+ Example of XML generated
+ ________________________
+ 
+ 
+ <?xml version="1.0" encoding="UTF-8"?>
+<forum title="Discussions on technologies we use" user="Mike Pear">
+  <discussion title="Discussion: I prefer email" address="http://localhost:8888/moodle/mod/forum/discuss.php?d=6">
+    <post date="Friday, 31 August 2012, 9:15 am" desc="See post in context" address="http://localhost:8888/moodle/mod/forum/discuss.php?d=6#p13" add="">
+      <text>Hi Tim, </text>
+      <text></text>
+      <text>I still like to write letters with pen and paper. In fact, I am into scrap</text>
+      <text>booking, using nice paper and art supplies. </text>
+      <text></text>
+      <text>You should try it sometime, it is lots of fun. </text>
+      <text></text>
+      <text>Yours, Mike</text>        
+    </post>
+  </discussion>
+  <discussion title="Discussion: Technology today" address="http://localhost:8888/moodle/mod/forum/discuss.php?d=7">
+    <post date="Friday, 31 August 2012, 9:22 am" desc="See post in context" address="http://localhost:8888/moodle/mod/forum/discuss.php?d=7" add="Post has attachment">
+      <text>Look at this cool cellphone, unbelievable!</text>        
+    </post>
+  </discussion>
+  <discussion title="Discussion: Here you can find more cool stuff" address="http://localhost:8888/moodle/mod/forum/discuss.php?d=8">
+    <post date="Friday, 31 August 2012, 9:24 am" desc="See post in context" address="http://localhost:8888/moodle/mod/forum/discuss.php?d=8" add="">
+      <text>What about a new phone? </text>
+      <text></text>
+      <text>http://en.wikipedia.org/wiki/IPhone </text>
+      <text></text>
+      <text>Wikipedia link [2] </text>
+      <text></text>
+      <text>Cool stuff, what do you think? </text>
+      <text></text>
+      <text>Yours, Mike</text>
+      <text></text>
+      <text>Links:</text>
+      <text>------</text>
+      <text>[1] http://en.wikipedia.org/wiki/IPhone</text>
+      <text></text>        
+    </post>
+  </discussion>
+ </forum>
+ 
+  
+ 
+ 
+ Extension Ideas
+ _______________
 
 - Multiple forums: Instead of just being able to select one forum per assignment, it could be helpful
 for the teacher to be able to select multiple forums, when marking across these multiple forums is desired.
@@ -68,6 +114,41 @@ who is at the centre of discussions, who has isolated postings) and include thes
 
 - Teacher postings: One could extract postings from teachers (and teaching assistants) and make these available
 to the teacher.
+
+- File format: On ecould give the user the choice between file formats. Currently, html files are created.
+PDF might be better?
+
+- Plagiarism checking: One could activate plagiarism checking for the generated files.
+
+
+
+Known Issues
+____________
+
+Conversion of hyperlinks into footnotes:
+This is done as part of converting html to text by Moodle's format_text_email() function. This works, but seems to 
+put in wrong numbering, like in the following example:
+
+What about a new phone? 
+
+Wikipedia link [2] 
+
+Cool stuff, what do you think? 
+
+Yours, Mike
+
+Links:
+------
+[1] http://en.wikipedia.org/wiki/IPhone
+
+___
+
+Text formatting is not preserved:
+Formatting like bold, underscore, italics is transformed into uppercase or leading underscore by 
+Moodle's format_text_email() function. This is probably ok (converting into pdf instead of html
+would allow preserving the original posting more closely).
+
+___
 
 
  
