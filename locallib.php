@@ -368,7 +368,7 @@ class assign_submission_forum extends assign_submission_plugin {
                 $contribution .= assign_submission_forum::discussion_start(get_string('discussion', 'assignsubmission_forum') . ': ' . $discussion->name, $path);
                 // add the posts
                 foreach ($posts as $post) {
-                    $date = date("l, d M Y, g:ia", $post->modified);
+                    $date = userdate($post->modified);
                     // put the link to the post in context together
                     if ($post->parent == 0) {
                         $path_post = $path;
