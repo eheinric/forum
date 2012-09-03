@@ -54,7 +54,7 @@ function assignsubmission_forum_pluginfile($course, $cm, context $context, $file
         return false;
     }
 
-     // check is users submission or has grading permission
+     // Check is users submission or has grading permission.
     if ($USER->id != $userid and !has_capability('mod/assign:grade', $context)) {
         return false;
     }
@@ -67,7 +67,8 @@ function assignsubmission_forum_pluginfile($course, $cm, context $context, $file
     if (!$file = $fs->get_file_by_hash(sha1($fullpath)) or $file->is_directory()) {
         return false;
     }
-    // do we need to enforce download here? I assume thet not forcing download is more convenient for the user
-    // what are the risks of not downloading?
+    // Do we need to enforce download here?
+    // I assume that not forcing download is more convenient for the user.
+    // What are the risks of not downloading?
     send_stored_file($file, 0, 0, false); // download MUST be forced - security!
 }

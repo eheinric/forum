@@ -17,7 +17,7 @@
 /**
  * Capability definitions for this module.
  *
- * @package   assignfeedback_forum
+ * @package   assignsubmission_forum
  * @copyright 2012 Massey University {@link http://www.massey.ac.nz}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

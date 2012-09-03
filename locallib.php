@@ -28,13 +28,11 @@
 require_once($CFG->libdir.'/eventslib.php');
 
 defined('MOODLE_INTERNAL') || die();
-/**
- * File areas for file submission assignment
- */
+
+/* File areas for file submission assignment */
 define('ASSIGNSUBMISSION_FORUM_MAXFILES', 20);
 define('ASSIGNSUBMISSION_FORUM_MAXSUMMARYFILES', 5);
 define('ASSIGNSUBMISSION_FORUM_FILEAREA', 'submission_files');
-
 
 /**
  * library class for file submission plugin extending submission plugin base class
@@ -60,22 +58,22 @@ class assign_submission_forum extends assign_submission_plugin {
      * @param MoodleQuickForm $mform The form to add elements to
      * @return void
      */
-
     public function get_settings(MoodleQuickForm $mform) {
         global $CFG, $COURSE, $DB;
 
-        // getting the values previously selected from db
+        // Getting the values previously selected from db.
         $defaultextractiondate = $this->get_config('extractiondate');
         $defaultforumidselected = $this->get_config('forumidselected');
 
-        // Adding the date/time selection onto the form
-        $mform->addElement('date_time_selector', 'assignsubmission_forum_extractiondate', get_string('extractiondate', 'assignsubmission_forum'));
+        // Adding the date/time selection onto the form.
+        $mform->addElement('date_time_selector', 'assignsubmission_forum_extractiondate',
+                           get_string('extractiondate', 'assignsubmission_forum'));
         $mform->addHelpButton('assignsubmission_forum_extractiondate', 'extractiondate', 'assignsubmission_forum');
         $mform->setDefault('assignsubmission_forum_extractiondate', time());
         $mform->disabledIf('assignsubmission_forum_extractiondate', 'assignsubmission_forum_enabled', 'eq', 0);
 
-        // selecting the forums belonging to the course for display as options
-        // each choice is an array entry, with forum id as value and forum name as display string
+        // Selecting the forums belonging to the course for display as options.
+        // Each choice is an array entry, with forum id as value and forum name as display string.
         // EH: I assume it will be ok to display all forums belonging to a course, regardless of things like groupings?
         $choices = array();
         $forums = $DB->get_records('forum', array('course'=>$COURSE->id));
@@ -84,7 +82,8 @@ class assign_submission_forum extends assign_submission_plugin {
             $choices[$forum->id] = $forum->name;
         }
 
-        $mform->addElement('select', 'assignsubmission_forum_forumidselected', get_string('forumidselected', 'assignsubmission_forum'), $choices);
+        $mform->addElement('select', 'assignsubmission_forum_forumidselected',
+                           get_string('forumidselected', 'assignsubmission_forum'), $choices);
         $mform->addHelpButton('assignsubmission_forum_forumidselected', 'forumidselected', 'assignsubmission_forum');
         $mform->setDefault('assignsubmission_forum_forumidselected', $defaultforumidselected);
         $mform->disabledIf('assignsubmission_forum_forumidselected', 'assignsubmission_forum_enabled', 'eq', 0);
@@ -100,11 +99,11 @@ class assign_submission_forum extends assign_submission_plugin {
     public function save_settings(stdClass $data) {
         global $DB;
 
-        // This is only called when 'Extract from forum(s)' is enabled
+        // This is only called when 'Extract from forum(s)' is enabled.
         $this->set_config('extractiondate', $data->assignsubmission_forum_extractiondate);
         $this->set_config('forumidselected', $data->assignsubmission_forum_forumidselected);
 
-        // set extracted to false so it is run next time when cron picks it up
+        // Set extracted to false so it is run next time when cron picks it up.
         $this->set_config('extracted', false);
 
         $temp = $this->assignment->get_instance()->id;
@@ -122,7 +121,8 @@ class assign_submission_forum extends assign_submission_plugin {
         $result = array();
         $fs = get_file_storage();
 
-        $files = $fs->get_area_files($this->assignment->get_context()->id, 'assignsubmission_forum', ASSIGNSUBMISSION_FORUM_FILEAREA, $submission->id, "timemodified", false);
+        $files = $fs->get_area_files($this->assignment->get_context()->id, 'assignsubmission_forum',
+                                     ASSIGNSUBMISSION_FORUM_FILEAREA, $submission->id, "timemodified", false);
 
         foreach ($files as $file) {
             $result[$file->get_filename()] = $file;
@@ -142,7 +142,7 @@ class assign_submission_forum extends assign_submission_plugin {
 
         $fs = get_file_storage();
 
-        // get context id of assignment (via the course module)
+        // Get context id of assignment (via the course module).
         $cm = get_coursemodule_from_instance('assign', $this->assignment->get_instance()->id, $this->assignment->get_course()->id);
         $contextid_assignment = context_module::instance($cm->id)->id;
         $files = $fs->get_area_files($contextid_assignment, 'assignsubmission_forum', $area, $submissionid, "id", false);
@@ -159,7 +159,6 @@ class assign_submission_forum extends assign_submission_plugin {
         global $DB;
         return $DB->get_record('assignsubmission_forum', array('submission'=>$submissionid));
     }
-
 
     /**
      * Display the list of files  in the submission status table
@@ -212,15 +211,16 @@ class assign_submission_forum extends assign_submission_plugin {
      *
      * @return void
      */
-    static function cron() {
+    public static function cron() {
         global $CFG, $DB;
 
-        // for all assignments check if forum plugin is activated
-        // if activated, check if the time set has now passed and that the extraction has not yet happened
-        // get all assignments that fulfil these criteria
-        // needs to call extract_submissions() for an assignment that needs to be cron triggered
+        // For all assignments check if forum plugin is activated.
+        // If activated, check if the time set has now passed and that the extraction has not yet happened.
+        // Get all assignments that fulfil these criteria.
+        // Then call extract_submissions() for an assignment that needs to be cron triggered.
         // EH: this query might be too time consuming - how to change it?
-        // put the forum related assignment settings into a separate table? (as will have to be done once we allow selection of multiple forums)
+        // Put the forum related assignment settings into a separate table?
+        // As will have to be done once we allow selection of multiple forums?
 
         $sql = "SELECT a.id
                     FROM {assign_plugin_config} AS p
@@ -255,62 +255,60 @@ class assign_submission_forum extends assign_submission_plugin {
         require_once($CFG->dirroot . '/mod/assign/submission/forum/locallib.php');
 
         foreach ($assignment_ids as $assignment_id) {
-            // do the extraction - needs to be given assignment id
-            assign_submission_forum::extract_submissions($assignment_id->id);
-            // record that extraction has been done so it is not run again triggered by cron
-            // cannot do this via set_config here, have to do it in db directly
-            $conditions = array('assignment'=>$assignment_id->id, 'plugin'=>'forum', 'subtype'=>'assignsubmission', 'name'=>'extracted');
+            // Do the extraction - needs to be given assignment id.
+            self::extract_submissions($assignment_id->id);
+            // Record that extraction has been done so it is not run again triggered by cron.
+            // Cannot do this via set_config here, have to do it in db directly.
+            $conditions = array('assignment'=>$assignment_id->id, 'plugin'=>'forum',
+                                'subtype'=>'assignsubmission', 'name'=>'extracted');
             $DB->set_field('assign_plugin_config', 'value', true, $conditions);
         }
     }
 
     /**
      * Extract submissions from discussions for an assignment
-     *     This is called either from saving the assignment settings (for the assignment concerned) or
-     *     via cron for an assignments selected by the cron function from the db
-     *
+     *     This is called via cron for an assignments selected by the cron function from the db
      *     For each student in the course of the assignment
      *
      *         Create the html containing the discussion contributions of a user
      *         Create a submission record in the DB assign_submissions table (or udpate an already existing one)
      *         Create the actual html file in the file submission area (which also creates an entry in the files table)
      *
-     * @param assignment $assignment
+     * @param int $assignment_id The id of the assignment for which to extract discussions and posts
      * @return void
      */
-
-    static function extract_submissions($assignment_id) {
+    static private function extract_submissions($assignment_id) {
         global $CFG, $COURSE, $DB, $USER;
 
-        // get all students in course that can submit to this assignment
-        // first, get the course id of the course the assignment belongs to
+        // Get all students in course that can submit to this assignment.
+        // First, get the course id of the course the assignment belongs to.
         $course_id = $DB->get_field('assign', 'course', array('id'=>$assignment_id), MUST_EXIST);
-        // then the context
+        // Then get the context.
         $context = context_course::instance($course_id);
-        // then all users who can submit to this assignment
+        // Then get all users who can submit to this assignment.
         // Question: should this be linked to the forum from which we want to extract?
-        // Later, could as well get teachers to extract their forum contributions and save them somewhere else
+        // Later, could as well get teachers to extract their forum contributions and save them somewhere else.
         $students = get_enrolled_users($context, "mod/assign:submit");
-        // get context id of assignment (via the course module)
+        // Get context id of assignment (via the course module).
         $cm = get_coursemodule_from_instance('assign', $assignment_id, $course_id);
         $contextid_assignment = context_module::instance($cm->id)->id;
-        // get the id from the forum from which to extract
-        $conditions = array('assignment'=>$assignment_id, 'plugin'=>'forum', 'subtype'=>'assignsubmission', 'name'=>'forumidselected');
+        // Get the id from the forum from which to extract.
+        $conditions = array('assignment'=>$assignment_id, 'plugin'=>'forum',
+                            'subtype'=>'assignsubmission', 'name'=>'forumidselected');
         $forum_id = $DB->get_field('assign_plugin_config', 'value', $conditions, MUST_EXIST);
-        //mtrace('forum id: ' . $forum_id);
-        // get the name of the forum
+        // Get the name of the forum.
         $forum_name = $DB->get_field('forum', 'name', array('id'=>$forum_id), MUST_EXIST);
 
         foreach ($students as $student) {
-            // extract discussion contributions
-            $discussion_content = assign_submission_forum::get_user_forum_contribution($student, $forum_id, $forum_name);
+            // Extract discussion contributions.
+            $discussion_content = self::get_user_forum_contribution($student, $forum_id, $forum_name);
 
-            // need to record that something is submitted on the user's behalf
-            $submission = assign_submission_forum::get_user_submission($student->id, $assignment_id);
-            // create file in file submission area
-            // the filename must be unique; as the extraction can happen multiple times, I have added date and time
-            // going down to seconds didn't seem enough (as I sometimes got duplicate entries for key mdl_file_pat_uix)
-            // I have added the last time to see if that fixes this issue (which seems to)
+            // Need to record that something is submitted on the user's behalf.
+            $submission = self::get_user_submission($student->id, $assignment_id);
+            // Create file in file submission area.
+            // The filename must be unique; as the extraction can happen multiple times, I have added date and time.
+            // Going down to seconds didn't seem enough (as I sometimes got duplicate entries for key mdl_file_pat_uix).
+            // I have added the last time to see if that fixes this issue (which seems to).
             $fs = get_file_storage();
             $fileinfo = array(
                 'contextid' => $contextid_assignment,
@@ -319,7 +317,8 @@ class assign_submission_forum extends assign_submission_plugin {
                 'itemid' => $submission->id,
                 'userid' => $student->id,
                 'filepath' => '/',
-                'filename' => 'ForumContributions_' . $student->lastname . '_' . date("Ymd", time()) . '_' . date("Hms", time()) . '_' . time() . '.html');
+                'filename' => 'ForumContributions_' . $student->lastname . '_' . date("Ymd", time()) .
+                              '_' . date("Hms", time()) . '_' . time() . '.html');
             $fs->create_file_from_string($fileinfo, $discussion_content);
         }
     }
@@ -337,7 +336,7 @@ class assign_submission_forum extends assign_submission_plugin {
 
         $submission = $DB->get_record('assign_submission', array('assignment'=>$assignmentid, 'userid'=>$userid));
 
-        // for an existing submission record, should the timemodified be updated?
+        // For an existing submission record, should the timemodified be updated?
         if ($submission) {
             return $submission;
         }
@@ -361,64 +360,63 @@ class assign_submission_forum extends assign_submission_plugin {
      *
      * @param int $user The record of the user for whom we want to extract discussion contributions
      * @param int $forumid The id of the forum from which we want to extract
+     * @param string $forumname The name of the forum from which we want to extract
      * @return string The discussion contributions
      */
     static private function get_user_forum_contribution($user, $forumid, $forumname) {
         global $DB, $CFG;
 
-        // prepare start of path for hrefs to forums, discussions and postings
+        // Prepare start of path for hrefs to forums, discussions and postings.
         $href_start = $CFG->wwwroot . '/mod/forum/';
-        //mtrace('path: ' . $href_start);
-        // path to forum
+        // Set the path to forum.
         $path = $href_start . 'view.php?id=' . $forumid;
 
-        // Create xml header
-        $contribution = assign_submission_forum::header_forum_start($forumname, $user->firstname, $user->lastname);
-        // get all forum discussion threads for the forum id sorted by discussions->id
+        // Create xml header.
+        $contribution = self::header_forum_start($forumname, $user->firstname, $user->lastname);
+        // Get all forum discussion threads for the forum id sorted by discussions->id.
         $discussions = $DB->get_records('forum_discussions', array('forum'=>$forumid), 'id');
         foreach ($discussions as $discussion) {
-            // get all posts by the user for the discussion thread sorted by post id
+            // Get all posts by the user for the discussion thread sorted by post id.
             $posts = $DB->get_records('forum_posts', array('discussion'=>$discussion->id, 'userid'=>$user->id), 'id');
-            // only include if user has made a contribution
+            // Only include if user has made a contribution.
             if (count($posts) > 0) {
-                // path to discussion
+                // Path to discussion.
                 $path = $href_start . 'discuss.php?d=' . $discussion->id;
-                // discussion opening tag
-                $contribution .= assign_submission_forum::discussion_start(get_string('discussion', 'assignsubmission_forum') . ': ' . $discussion->name, $path);
-                // add the posts
+                // Discussion opening tag.
+                $contribution .= self::discussion_start(get_string('discussion', 'assignsubmission_forum') . ': ' .
+                                                        $discussion->name, $path);
+                // Add the posts.
                 foreach ($posts as $post) {
                     $date = userdate($post->modified);
-                    // put the link to the post in context together
+                    // Put the link to the post in context together.
                     if ($post->parent == 0) {
                         $path_post = $path;
                     } else {
                         $path_post = $path . '#p' . $post->parent;
                     }
                     $text = get_string('seepostincontext', 'assignsubmission_forum');
-                    // check if there has been an attachment to the post and prepare additional text accordingly
+                    // Check if there has been an attachment to the post and prepare additional text accordingly.
                     $add_text = '';
                     if ($post->attachment > 0) {
                         $add_text = get_string('posthasattachment', 'assignsubmission_forum');
                     }
-                    $contribution .= assign_submission_forum::post_start($date, $text, $path_post, $add_text);
-                    // format_text_email takes out the html tags (which is what we need, as otherwise the xml format is upset
-                    $contribution .= assign_submission_forum::post_content(format_text_email($post->message, FORMAT_HTML));
-                    //$contribution .= assign_submission_forum::post_content($post->message);
-
-                    $contribution .= assign_submission_forum::closing_tag("post");
+                    $contribution .= self::post_start($date, $text, $path_post, $add_text);
+                    // Use format_text_email to remove the html tags (which is what we need, as otherwise the xml format is upset).
+                    $contribution .= self::post_content(format_text_email($post->message, FORMAT_HTML));
+                    $contribution .= self::closing_tag("post");
                 }
-                $contribution .= assign_submission_forum::closing_tag("discussion");
+                $contribution .= self::closing_tag("discussion");
             }
         }
-        $contribution .= assign_submission_forum::closing_tag("forum");
-        // convert xml into html
+        $contribution .= self::closing_tag("forum");
+        // Convert xml into html.
         $xml = new DOMDocument;
         $xml->loadxml($contribution);
         $xsl = new DOMDocument;
         $xsl->load($CFG->dirroot.'/mod/assign/submission/forum/stylesheet.xsl');
-        // Configure the transformer
+        // Configure the transformer.
         $proc = new XSLTProcessor;
-        // attach the xsl rules
+        // Attach the xsl rules.
         $proc->importStyleSheet($xsl);
         $contribution = $proc->transformToXML($xml);
         return $contribution;
@@ -446,7 +444,7 @@ EOD;
      * Create the start for the discussion
      *
      * @param string $title The title of the discussion
-     * @param string $laddress The path to the discussion in context
+     * @param string $address The path to the discussion in context
      * @return string The opening tag for the discussion
      */
     static private function discussion_start($title, $address) {
@@ -464,6 +462,7 @@ EOD;
      * @param string $date The date the post was last modified
      * @param string $text The text to be shown for the link to the post
      * @param string $address The path to the posting in context
+     * @param string $additionaltext Any additional text to be shown for the post
      * @return string The opening tag for the post
      */
     static private function post_start($date, $text, $address, $additionaltext) {
@@ -483,12 +482,12 @@ EOD;
      */
     static private function post_content($content) {
 
-        // just in case $content is empty, which it shouldn't be
+        // Just in case $content is empty, which it shouldn't be.
         if (!$content) {
             return "<text></text>";
         }
-        // content can span multiple lines
-        // put each line into its own set of <text> tags
+        // Content can span multiple lines.
+        // Put each line into its own set of <text> tags.
         $lines = preg_split("/(\r\n|\n|\r)/", $content);
         $xml = "";
         foreach ($lines as $line) {

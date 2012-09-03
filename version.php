@@ -27,4 +27,4 @@ defined('MOODLE_INTERNAL') || die();
 $plugin->version   = 2012081300;
 $plugin->requires  = 2012061700;
 $plugin->component = 'assignsubmission_forum';
-$plugin->cron      = 60; // for cron to check every 60 secs
+$plugin->cron      = 60; // For cron to check every 60 secs.

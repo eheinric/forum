@@ -27,6 +27,3 @@ $settings->add(new admin_setting_configcheckbox('assignsubmission_forum/default'
                    new lang_string('default', 'assignsubmission_forum'),
                    new lang_string('default_help', 'assignsubmission_forum'), 0));
 
-
-
-//$settings->add(new admin_setting_configtime($e_hours, $e_minutes, 'bla', 'blabla', array('h' => '7', 'm' => '34')));

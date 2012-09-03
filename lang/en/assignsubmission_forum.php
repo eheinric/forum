@@ -44,8 +44,8 @@ $string['posthasattachment'] = 'Post has attachment';
 
 $string['seepostincontext'] = 'See post in context';
 
-$string['whentoextractonsave'] = "Extract forum contributions on save";
-$string['whentoextractondate'] = "Extract forum contributions on specific date and time";
+$string['whentoextractonsave'] = 'Extract forum contributions on save';
+$string['whentoextractondate'] = 'Extract forum contributions on specific date and time';
 
 $string['pluginname'] = 'Submissions generated from forum(s)';
 

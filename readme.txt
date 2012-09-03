@@ -58,7 +58,8 @@
  <?xml version="1.0" encoding="UTF-8"?>
 <forum title="Discussions on technologies we use" user="Mike Pear">
   <discussion title="Discussion: I prefer email" address="http://localhost:8888/moodle/mod/forum/discuss.php?d=6">
-    <post date="Friday, 31 August 2012, 9:15 am" desc="See post in context" address="http://localhost:8888/moodle/mod/forum/discuss.php?d=6#p13" add="">
+    <post date="Friday, 31 August 2012, 9:15 am" desc="See post in context" 
+          address="http://localhost:8888/moodle/mod/forum/discuss.php?d=6#p13" add="">
       <text>Hi Tim, </text>
       <text></text>
       <text>I still like to write letters with pen and paper. In fact, I am into scrap</text>
@@ -70,12 +71,15 @@
     </post>
   </discussion>
   <discussion title="Discussion: Technology today" address="http://localhost:8888/moodle/mod/forum/discuss.php?d=7">
-    <post date="Friday, 31 August 2012, 9:22 am" desc="See post in context" address="http://localhost:8888/moodle/mod/forum/discuss.php?d=7" add="Post has attachment">
+    <post date="Friday, 31 August 2012, 9:22 am" desc="See post in context" 
+          address="http://localhost:8888/moodle/mod/forum/discuss.php?d=7" add="Post has attachment">
       <text>Look at this cool cellphone, unbelievable!</text>        
     </post>
   </discussion>
-  <discussion title="Discussion: Here you can find more cool stuff" address="http://localhost:8888/moodle/mod/forum/discuss.php?d=8">
-    <post date="Friday, 31 August 2012, 9:24 am" desc="See post in context" address="http://localhost:8888/moodle/mod/forum/discuss.php?d=8" add="">
+  <discussion title="Discussion: Here you can find more cool stuff" 
+        address="http://localhost:8888/moodle/mod/forum/discuss.php?d=8">
+    <post date="Friday, 31 August 2012, 9:24 am" desc="See post in context" 
+            address="http://localhost:8888/moodle/mod/forum/discuss.php?d=8" add="">
       <text>What about a new phone? </text>
       <text></text>
       <text>http://en.wikipedia.org/wiki/IPhone </text>
@@ -149,7 +153,3 @@ Moodle's format_text_email() function. This is probably ok (converting into pdf 
 would allow preserving the original posting more closely).
 
 ___
-
-
- 
- 
