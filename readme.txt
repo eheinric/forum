@@ -27,21 +27,24 @@
  Purpose of this plugin
  ______________________
  
- The idea behind thsi plugin is to help a teacher with the assessment of forum contributions.
- The teacher sets up an assignment (which initially might be hidden from students) and determines
- the forum from which to extratc student contributions. The teacher also sets the date at which 
- contributions will be extracted.
+ The idea behind this plugin is to help a teacher with the assessment of 
+ forum contributions. The teacher sets up an assignment (which initially 
+ might be hidden from students) and determines the forum from which to extract 
+ student contributions. The teacher also sets the date at which  contributions 
+ will be extracted.
  
- Once contributions are extracted (triggered by cron via the time set), and html file is available 
- for marking in the assignment. The teacher can use all the usual assignment marking facilities.
+ Once contributions are extracted (triggered by cron via the time set), 
+ an html file is available for marking in the assignment. The teacher 
+ can use all the usual assignment marking facilities.
  
  The advantage for the teacher is to see all contributions of a student close together 
- (with links to check out a posting in context, if required). The advantage for students is that they 
- not only get the mark and comments back, but also can see their postings (which might make it easier 
- to understand the mark and feedback received).
+ (with links to check out a posting in context, if required). The advantage for 
+ students is that they not only get the mark and comments back, but also can see 
+ their postings (which might make it easier to understand the mark and feedback received).
  
- This plugin goes back to research undertaken by Yang Yang as part of his Masters studies 
- at Massey University (supervised by Eva Heinrich (e.heinrich@massey.ac.nz) and Elizabeth Kemp).
+ This plugin goes back to research undertaken by Yang Yang as part of his Masters 
+ studies at Massey University (supervised by Eva Heinrich (e.heinrich@massey.ac.nz) 
+ and Elizabeth Kemp).
  
  
  Current Code
@@ -104,23 +107,27 @@
  Extension Ideas
  _______________
 
-- Multiple forums: Instead of just being able to select one forum per assignment, it could be helpful
-for the teacher to be able to select multiple forums, when marking across these multiple forums is desired.
+- Multiple forums: Instead of just being able to select one forum per assignment, 
+it could be helpful for the teacher to be able to select multiple forums, when 
+marking across these multiple forums is desired.
 
-- Date restrictions: Setting a start and an end date for the extraction would allow the teacher to control 
-the time periods for extraction. E.g., the teacher might want to select weeks 1 and 2 of the course separately.
+- Date restrictions: Setting a start and an end date for the extraction would allow 
+the teacher to control the time periods for extraction. E.g., the teacher might want 
+to select weeks 1 and 2 of the course separately.
 
-- Statistics: One could calculate statistics (like number of postings, length of postings) on class and 
-individual levels and include these in the files generated per students.
+- Statistics: One could calculate statistics (like number of postings, length of 
+postings) on class and individual levels and include these in the files generated 
+per students.
 
-- Relationships: One could extract information on the relationships about postings (who has interacted with whom,
-who is at the centre of discussions, who has isolated postings) and include these in the files generated per students.
+- Relationships: One could extract information on the relationships about postings 
+(who has interacted with whom, who is at the centre of discussions, who has isolated 
+postings) and include these in the files generated per students.
 
-- Teacher postings: One could extract postings from teachers (and teaching assistants) and make these available
-to the teacher.
+- Teacher postings: One could extract postings from teachers (and teaching assistants) 
+and make these available to the teacher.
 
-- File format: On ecould give the user the choice between file formats. Currently, html files are created.
-PDF might be better?
+- File format: One could give the user the choice between file formats. Currently, 
+html files are created. PDF might be better?
 
 - Plagiarism checking: One could activate plagiarism checking for the generated files.
 
@@ -130,8 +137,8 @@ Known Issues
 ____________
 
 Conversion of hyperlinks into footnotes:
-This is done as part of converting html to text by Moodle's format_text_email() function. This works, but seems to 
-put in wrong numbering, like in the following example:
+This is done as part of converting html to text by Moodle's format_text_email() function. 
+This works, but seems to put in wrong numbering, like in the following example:
 
 What about a new phone? 
 
@@ -148,8 +155,8 @@ Links:
 ___
 
 Text formatting is not preserved:
-Formatting like bold, underscore, italics is transformed into uppercase or leading underscore by 
-Moodle's format_text_email() function. This is probably ok (converting into pdf instead of html
-would allow preserving the original posting more closely).
+Formatting like bold, underscore, italics is transformed into uppercase or 
+leading underscore by Moodle's format_text_email() function. This is probably ok 
+(converting into pdf instead of html would allow preserving the original posting more closely).
 
 ___
